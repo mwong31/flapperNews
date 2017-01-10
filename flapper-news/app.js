@@ -4,6 +4,26 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
+var mongoose = require('mongoose');
+
+require('./models/Posts'); 
+require('./models/Comments'); 
+require('./models/Users'); 
+require('./config/passport'); 
+
+mongoose.Promise = global.Promise; 
+mongoose.connect("mongodb://localhost:27017/sandbox");
+//mongoose.connect = ('mongodb://localhost/news');
+
+
+
+module.exports = {
+	"db": {
+        "connection": "mongodb://localhost",
+        "name": "db"             
+    }
+};
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -21,6 +41,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize()); 
 
 app.use('/', index);
 app.use('/users', users);
